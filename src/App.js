@@ -1,23 +1,51 @@
 import React, { Component } from 'react';
+
 import './App.css';
 
 function Square(props) {
   return (
-    <button className='square'>
+    <button className='square' onClick={() => props.onClick()}>
+    {props.displayValue}
     </button>
   );
 }
 
+class NumberSelection extends Component {
+  renderSquare(i) {
+    return <Square key={i} displayValue={i} onClick={() => this.props.onClick(i)} />;
+  }
+
+  renderSquares() {
+    let squares = [];
+
+    for(let i = 1; i <= 9; i++) {
+      squares.push(this.renderSquare(i));
+    }
+
+    squares.push(<Square key={10} displayValue={'C'} onClick={() => this.props.onClick('C')} />);
+
+    return <div>{squares}</div>;
+  }
+
+  render() {
+    return (
+      <div>
+      {this.renderSquares()}
+      </div>
+    );
+  }
+}
+
 class Board extends Component {
-  renderSquare(i, col) {
-    return <Square key={i} test={i} value={this.props.squares[i]} onClick={() => this.props.onClick(col)} />;
+  renderSquare(i) {
+    return <Square key={i} displayValue={i} value={this.props.squares[i]} onClick={() => this.props.onClick(i)} />;
   }
 
   renderRow(cols, startIndex) {
     let name = 'board-row';
     let squares = [];
     for(let i = 0; i < cols; i++) {
-      squares.push(this.renderSquare(startIndex + i, i));
+      squares.push(this.renderSquare(startIndex + i));
     }
     return (
       <div key={startIndex + 100} className={name}>
@@ -46,12 +74,23 @@ class Game extends Component {
       squares: Array(42).fill(null)
     }
   }
-  handleClick(i) {
 
+  handleClick(i) {
+    console.log('handleClick:' + i);
+  }
+
+  handleNumberSelectionClick(i) {
+    console.log('handleNumberSelectionClick:' + i);
   }
 
   render() {
-    return <Board cols={9} rows={9} squares={this.state.squares} onClick={(i) => this.handleClick(i)} />
+    return (
+    <div>
+    <Board cols={9} rows={9} squares={this.state.squares} onClick={(i) => this.handleClick(i)} />
+    <p></p>
+    <NumberSelection onClick={(i) => this.handleNumberSelectionClick(i)}/>
+    </div>
+  );
   }
 }
 

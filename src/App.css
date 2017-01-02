@@ -18,6 +18,16 @@
   font-size: large;
 }
 
+.board-row {
+  height: 49px;
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
 .square {
   background: #fff;
   border: 1px solid #999;
