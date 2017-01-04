@@ -5,14 +5,14 @@ import './App.css';
 function Square(props) {
   return (
     <button className='square' onClick={() => props.onClick()}>
-    {props.displayValue}
+    {props.value}
     </button>
   );
 }
 
 class NumberSelection extends Component {
   renderSquare(i) {
-    return <Square key={i} displayValue={i} onClick={() => this.props.onClick(i)} />;
+    return <Square key={i} value={i} onClick={() => this.props.onClick(i)} />;
   }
 
   renderSquares() {
@@ -22,7 +22,7 @@ class NumberSelection extends Component {
       squares.push(this.renderSquare(i));
     }
 
-    squares.push(<Square key={10} displayValue={'C'} onClick={() => this.props.onClick('C')} />);
+    squares.push(<Square key={10} value={'C'} onClick={() => this.props.onClick('C')} />);
 
     return <div>{squares}</div>;
   }
@@ -38,7 +38,7 @@ class NumberSelection extends Component {
 
 class Board extends Component {
   renderSquare(i) {
-    return <Square key={i} displayValue={i} value={this.props.squares[i]} onClick={() => this.props.onClick(i)} />;
+    return <Square key={i} value={this.props.squares[i]} onClick={() => this.props.onClick(i)} />;
   }
 
   renderRow(cols, startIndex) {
@@ -71,16 +71,23 @@ class Game extends Component {
   constructor() {
     super();
     this.state = {
-      squares: Array(42).fill(null)
+      squares: Array(81).fill(null),
+      currentSelection: -1
     }
   }
 
   handleClick(i) {
     console.log('handleClick:' + i);
+    this.setState( {currentSelection: i});
   }
 
   handleNumberSelectionClick(i) {
-    console.log('handleNumberSelectionClick:' + i);
+    console.log('handleNumberSelectionClick:' + i + ' currentSelection' + this.state.currentSelection);
+
+    let squares = this.state.squares.slice();
+    squares[this.state.currentSelection] = i;
+
+    this.setState({squares: squares});
   }
 
   render() {
