@@ -85,7 +85,12 @@ class Game extends Component {
     console.log('handleNumberSelectionClick:' + i + ' currentSelection' + this.state.currentSelection);
 
     let squares = this.state.squares.slice();
-    squares[this.state.currentSelection] = i;
+    if(i !== 'C') {
+      squares[this.state.currentSelection] = i;
+    } else {
+      squares[this.state.currentSelection] = null;
+    }
+
 
     this.setState({squares: squares});
   }
