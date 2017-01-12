@@ -71,6 +71,7 @@ class Game extends Component {
   constructor() {
     super();
     this.state = {
+      squaresStart: Array(81).fill(null),
       squares: Array(81).fill(null),
       currentSelection: -1
     }
@@ -95,12 +96,38 @@ class Game extends Component {
     this.setState({squares: squares});
   }
 
+  handleStartGameClick() {
+    this.setState({squaresStart: this.state.squares});
+  }
+
+  handleRestartGameClick() {
+    this.setState({squares: this.state.squaresStart});
+  }
+
+  handleClearGameClick() {
+    this.setState({
+      squaresStart: Array(81).fill(null),
+      squares: Array(81).fill(null),
+      currentSelection: -1
+    });
+  }
+
   render() {
     return (
     <div>
     <Board cols={9} rows={9} squares={this.state.squares} onClick={(i) => this.handleClick(i)} />
     <p></p>
     <NumberSelection onClick={(i) => this.handleNumberSelectionClick(i)}/>
+    <p></p>
+    <button onClick={() => this.handleStartGameClick()}>
+    Start
+    </button>
+    <button onClick={() => this.handleRestartGameClick()}>
+    Restart
+    </button>
+    <button onClick={() => this.handleClearGameClick()}>
+    Clear board
+    </button>
     </div>
   );
   }
