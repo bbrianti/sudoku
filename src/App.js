@@ -113,6 +113,7 @@ class Game extends Component {
   }
 
   render() {
+    gameEnded(this.state.squares);
     return (
     <div>
     <Board cols={9} rows={9} squares={this.state.squares} onClick={(i) => this.handleClick(i)} />
@@ -131,6 +132,63 @@ class Game extends Component {
     </div>
   );
   }
+}
+
+function isLineDone(line) {
+  //console.log(line);
+  const total = line.reduce((a, b) => a + b, 0);
+  const unique = [...new Set(line)];
+  /*console.log(total);
+  console.log(unique);*/
+  return total === 45 && unique.length === 9;
+}
+
+function getSquareArray(squareIndex, squares) {
+  let startIndex = 0;
+  switch(squareIndex) {
+      case 0:
+      case 1:
+      case 2:
+        startIndex = squareIndex * 3;
+      break;
+      case 3:
+      case 4:
+      case 5:
+        startIndex = squareIndex * 3 + 18;
+      break;
+      case 6:
+      case 7:
+      case 8:
+        startIndex = squareIndex * 3 + 36;
+      break;
+  }
+
+  let square = [];
+  square = square.concat(squares.slice(startIndex, startIndex + 3), squares.slice(startIndex + 9, startIndex + 12), squares.slice(startIndex + 18, startIndex + 21));
+
+  return square;
+}
+
+export function gameEnded(squares) {
+  let done = true;
+
+  for(let i = 0; i < 9; i++) {
+    if(isLineDone(squares.slice(i * 9, i * 9 + 9)) === false) {
+      done = false;
+    }
+
+    let column = [squares[i], squares[i + 9], squares[i + 18], squares[i + 27], squares[i + 36], squares[i + 45], squares[i + 54], squares[i + 63], squares[i + 72]];
+    if(isLineDone(column) === false) {
+      done = false;
+    }
+
+    let square = getSquareArray(0, squares);
+    if(isLineDone(square) === false) {
+      done = false;
+    }
+  }
+
+  return done;
 }
 
 class App extends Component {
